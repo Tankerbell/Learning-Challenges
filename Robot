@@ -1,0 +1,45 @@
+# creation of robot class with (x, y) coordinates, 360 degree heading, and ability to walk
+
+class robot:
+    def __init__(self, x, y, h):
+        self.x = x
+        self.y = y
+        self.h = h
+
+    def moonwalk(self, queuesheet):
+        for i in range(len(queuesheet)):
+            if queuesheet[i] == "L":
+                self.h = (self.h + 270) % 360
+            elif queuesheet[i] == "R":
+                self.h = (self.h + 90) % 360
+            else:
+                if self.h == 0:
+                    self.y += int(queuesheet[i])
+                elif self.h == 180:
+                    self.y -= int(queuesheet[i])
+                elif self.h == 90:
+                    self.x += int(queuesheet[i])
+                elif self.h == 270:
+                    self.x -= int(queuesheet[i])
+
+# create highly athletic robot to do our bidding, request directions, and go for a stroll
+
+MrRobot = robot(0, 0, 0)
+
+print("Provide directions in the form of Ls, Rs, and 0-9 integers (e.g. L1R4R2):")
+
+path = input()
+
+MrRobot.moonwalk(path * 4)
+
+# The necesarry condition for looping is that a sequence ends at the initial position and heading. Conversely, if at the end\
+# of a sequence the final heading is the same as the initial heading but position is different, the net change in position\
+# will repeat indefinitely. By running a sequence four times, we satisfy that the final\
+# heading will be the initial heading (0 degree rotation 4x, 180 degree rotation 2x, or 90 degree rotation 4x) and thus\
+# it serves as a check for looping. If the final position is the starting position after four sequences, then and only then\
+# does the sequence create a loop.
+
+if MrRobot.x == 0 and MrRobot.y == 0 and MrRobot.h ==0:
+    print("directions create a loop")
+else:
+    print("directions do not create a loop")
